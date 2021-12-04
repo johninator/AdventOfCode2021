@@ -29,6 +29,12 @@ fn read(path: &str) -> Result<Vec<i64>, io::Error> {
     Ok(v) // everything is Ok, return vector
 }
 
+fn compute_sum(pos: usize, heights: &Vec<i64>) -> i64 {
+    let sum = heights[pos] + heights[pos-1] + heights[pos-2];
+    println!("sum is {}", sum);
+    return sum;
+}
+
 fn main() {
     let reading_result = read("input.txt");
     // println!("{:?}", heights);
@@ -41,18 +47,24 @@ fn main() {
     }
 
     let mut count_increased = 0;
-    let mut height_previous = heights_good.first().unwrap();
+    let mut sum_previous = 0;
+    let mut sum = 0;
 
     for (pos, e) in heights_good.iter().enumerate() {
         // iterate immutably
 
-        let height: &i64 = e;
-        if height > height_previous {
-            count_increased = count_increased + 1;
+        if pos > 1 {
+
+            sum = compute_sum(pos, &heights_good);
         }
 
-        
-        height_previous = e;
+        if pos > 2 {
+            if sum > sum_previous {
+                count_increased = count_increased + 1;
+            }
+        }
+
+        sum_previous = sum;
     }
 
     println!("Increased {} times", count_increased);
