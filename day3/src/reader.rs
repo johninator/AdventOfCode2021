@@ -3,9 +3,11 @@ use std::io;
 use std::io::BufRead;
 use std::io::BufReader;
 
+const SIZE : usize = 12;
+
 // function takes path in the form of string slice and returns enum
 // which contains vector of integers on success or IO error type, see `std::io::Error`
-pub fn read(path: &str) -> Result<Vec<[i64; 12]>, io::Error> {
+pub fn read(path: &str) -> Result<Vec<[i64; SIZE]>, io::Error> {
     let file = File::open(path)?; // open file by given path
                                   // wrap file into generic buffered reader, it will use 4 KB buffer internally
                                   // to reduce number of syscalls, thus improving performance
@@ -19,7 +21,7 @@ pub fn read(path: &str) -> Result<Vec<[i64; 12]>, io::Error> {
         // an error,in which case we return this error as the function result
         let line = line?;
         
-        let mut binary_code : [i64; 12] = [0,0,0,0,0,0,0,0,0,0,0,0];
+        let mut binary_code : [i64; SIZE] = [0;SIZE];
 
         for (i, c) in line.chars().enumerate() {
             if c == '1' {
