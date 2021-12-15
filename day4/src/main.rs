@@ -10,18 +10,21 @@ fn main() {
 
     let mut counters : Vec<[i64; 25]> = vec![[0;25]; boards.len()];
 
+    let mut counter_wins : Vec<i64> = vec![0; boards.len()]; 
+
     for number in input_random {
         for (i_board, board) in boards.iter().enumerate() {
             for i in 0..25 {
                 if board[i] == number {
                     counters[i_board][i] = counters[i_board][i] + 1;
 
-                    if check_board(counters[i_board]) == true {
+                    if counter_wins[i_board] == 0 &&
+                       check_board(counters[i_board]) == true {
                         let sum = compute_sum_board(board, counters[i_board]);
                         let result = sum * number;
                         println!("finished! Board {}, Sum {}, Number {}, Result: {}",
                                  i_board, sum, number, result);
-                        return;
+                        counter_wins[i_board] = 1 ;
                     }
                 }
             }
