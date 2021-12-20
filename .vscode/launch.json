@@ -4,19 +4,18 @@
     // Weitere Informationen finden Sie unter https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug executable 'day1'",
+            "name": "Debug executable 'day8'",
             "cargo": {
                 "args": [
                     "build",
-                    "--bin=day1",
-                    "--package=day1"
+                    "--bin=day8",
+                    "--package=day8"
                 ],
                 "filter": {
-                    "name": "day1",
+                    "name": "day8",
                     "kind": "bin"
                 }
             },
