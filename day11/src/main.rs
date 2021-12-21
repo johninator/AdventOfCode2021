@@ -5,12 +5,14 @@ use std::cmp;
 fn main() {
     let mut energies = reader::read("input.txt").unwrap();
     let mut flashes = 0;
-    let steps = 100;
+    let steps = 1000;
 
     for step in 0..steps {
         increase_energy(&mut energies);
-        flash(&mut energies, &mut flashes);
-        println!("{:?}", energies);
+        if !flash(&mut energies, &mut flashes) {
+            println!("step: {}", step+1);
+            return;
+        }
     }
 
     println!("{}", flashes);
@@ -23,9 +25,11 @@ fn increase_energy(energies: &mut Vec<u32>)
 }
 
 
-fn flash(energies: &mut Vec<u32>, flashes: &mut i64)
+fn flash(energies: &mut Vec<u32>, flashes: &mut i64) -> bool
 {
     let mut flashes_left = energies.iter().filter(|&&x| x == 10).count();
+
+    let mut counter_flashes = 0;
 
     while flashes_left > 0
     {
@@ -41,12 +45,19 @@ fn flash(energies: &mut Vec<u32>, flashes: &mut i64)
 
         flash_single(energies, index);
         *flashes += 1;
+        counter_flashes += 1;
         flashes_left = energies.iter().filter(|&&x| x == 10).count();
     }
 
     *energies = energies.iter().map(|&x| {
         if x > 9 { 0 } else { x }
     }).collect();
+
+    if counter_flashes == 100 {
+        return false;
+    }
+
+    return true;
 }
 
 fn flash_single(energies: &mut Vec<u32>, index_flat: usize)
