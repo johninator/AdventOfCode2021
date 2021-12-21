@@ -5,10 +5,13 @@ mod reader;
 fn main() {
 
     let input_vecs = reader::read("input.txt").unwrap();
-    let mut stack : Vec<Bracket> = Vec::new();
-    let mut sum = 0;
+    let mut scores : Vec<i64> = Vec::new();
 
     for input_vec in input_vecs {
+
+        let mut stack : Vec<Bracket> = Vec::new();
+        let mut abort : bool = false;
+
         for ch in input_vec {
 
             if ch == '(' || ch == '[' || ch == '{' || ch == '<' {
@@ -26,35 +29,51 @@ fn main() {
             } else {
                 if ch == ')' {
                     if !matches!(stack.pop().unwrap(),Bracket::ROUND) {
-                        println!("Expected ) but found instead");
-                        sum += 3;
+                        abort = true;
                         break;
                     }
                 } else if ch == ']' {
                     if !matches!(stack.pop().unwrap(),Bracket::EDGY) {
-                        println!("Expected ] but found instead");
-                        sum += 57;
+                        abort = true;
                         break;
                     }
                 } else if ch == '}' {
                     if !matches!(stack.pop().unwrap(),Bracket::BRACES) {
-                        println!("Expected }} but found instead");
-                        sum += 1197;
+                        abort = true;
                         break;
                     }
                 } else { // ch == '>'
                     if !matches!(stack.pop().unwrap(),Bracket::TRIANGLE) {
-                        println!("Expected > but found  instead");
-                        sum += 25137;
+                        abort = true;
                         break;
                     }
                 }
-
             }
         }
+
+        if abort {
+            continue;
+        }
+
+        let mut score = 0;
+        for bracket in stack.iter().rev() {
+            score *= 5;
+            if matches!(bracket, Bracket::ROUND) {
+                score += 1;
+            } else if matches!(bracket, Bracket::EDGY) {
+                score += 2;
+            } else if matches!(bracket, Bracket::BRACES) {
+                score += 3;
+            } else {
+                score += 4
+            }
+        }
+        println!("score {}", score);
+        scores.push(score);
     }
 
-    println!("sum {}", sum);
+    scores.sort();
+    println!("middle score {}",  scores[scores.len()/2]);
 }
 
 enum Bracket
