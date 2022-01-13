@@ -3,7 +3,7 @@ use std::io;
 use std::io::BufRead;
 use std::io::BufReader;
 
-pub fn read(path: &str) -> Result<Vec<Vec<u32>>, io::Error> {
+pub fn read(path: &str) -> Result<Vec<Vec<i32>>, io::Error> {
 
     let file = File::open(path)?;
     let br = BufReader::new(file);
@@ -11,7 +11,7 @@ pub fn read(path: &str) -> Result<Vec<Vec<u32>>, io::Error> {
 
     for line in br.lines() {
         let line = line?;
-        let line_int : Vec<u32> = line.chars().map(|x| x.to_digit(10).unwrap()).collect();
+        let line_int : Vec<i32> = line.chars().map(|x| x.to_digit(10).unwrap() as i32).collect();
         cave.push(line_int);
     }
     Ok(cave)
